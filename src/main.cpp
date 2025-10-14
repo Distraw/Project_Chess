@@ -1,12 +1,14 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <iostream>
-using namespace std;
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 int main() {
+    auto log = spdlog::stdout_color_mt("stdout");
+
     if (glfwInit() == GLFW_FALSE) {
-        cout << "Failed to initialize GLFW\n";
+        log->error("failed to initialize GLFW");
         return -1;
     }
 
@@ -15,13 +17,13 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
-    cout << "MacOS is detected.\n";
+    log->info("MacOS is detected");
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
     GLFWwindow* window = glfwCreateWindow(600, 600, "Hello world!!!", 0, 0);
     if (window == NULL) {
-        cout << "Failed to create window\n";
+        log->error("failed to create window");
         return -1;
     }
 
@@ -29,7 +31,7 @@ int main() {
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        cout << "Failed to initialize GLAD\n";
+        log->error("failed to initialize GLAD");
         return -1;
     }
 
@@ -41,6 +43,6 @@ int main() {
     }
 
     glfwTerminate();
-
+    log->info("terminating GLFW and exiting application");
     return 0;
 }
