@@ -4,8 +4,16 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+#include "util/config.h"
+
 int main() {
     auto log = spdlog::stdout_color_mt("stdout");
+
+    Config config(log);
+    if (!config.Init("./settings.json")) {
+        log->critical("failed to initialize config");
+        return -1;
+    }
 
     if (glfwInit() == GLFW_FALSE) {
         log->error("failed to initialize GLFW");
@@ -21,7 +29,8 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    GLFWwindow* window = glfwCreateWindow(600, 600, "Hello world!!!", 0, 0);
+    GLFWwindow* window = glfwCreateWindow(config.window_width(), config.window_height(), "Distraw Chess", 
+                                            config.window_fullscreen() == true ? glfwGetPrimaryMonitor() : NULL, NULL);
     if (window == NULL) {
         log->error("failed to create window");
         return -1;
