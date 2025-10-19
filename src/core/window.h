@@ -21,8 +21,11 @@ public:
     ~Window();
 
     bool Init(int width, int height, string title);
+    void Refresh();
 
     void ChangeBackgroundColor(int r, int g, int b);
+
+    bool IsOpened();
 
     int    width();
     int    height();

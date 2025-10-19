@@ -1,5 +1,7 @@
 /build
 /lib
+/.vscode
+
 CMakeLists.txt
 run.bash
 TODO.md
