@@ -7,6 +7,10 @@
 #include "core/window.h"
 #include "core/shader.h"
 #include "core/program.h"
+
+#include "render/vao.h"
+#include "render/vbo.h"
+
 #include "util/config.h"
 
 int main() {
@@ -46,32 +50,24 @@ int main() {
     vertex_shader.Unload();
     fragment_shader.Unload();
 
-    GLfloat triangle[6]{
-        -0.5f, -0.5f,
-        0.f, 0.5f,
-        0.5f, -0.5f
-    };
+    VAO vao(log);
+    vao.Init();
+    
+    float vertices[]{-0.5f, -0.5f, 0.5f, -0.5f, 0.f, 0.5f};
 
-    //
-    GLuint VAO, VBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    VBO vbo(log);
+    vbo.Init(vertices, sizeof(vertices));
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    //
+    vao.Attach(vbo.native_vbo(), 0);
 
     window.ChangeBackgroundColor(0, 0, 0);
     while (window.IsOpened()) {
         window.Refresh();
         glfwPollEvents();
 
+        vao.Use();
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        vao.Use(false);
     }
 
     return 0;
