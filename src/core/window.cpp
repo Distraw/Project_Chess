@@ -5,6 +5,14 @@ Window::Window(shared_ptr<spdlog::logger> log) {
 }
 
 Window::~Window() {
+    if (_window == nullptr) {
+        _log->error("attempted to delete non-existent window");
+        return;
+    }
+
+    _log->trace("closing window...");
+    glfwDestroyWindow(_window);
+
     _log->trace("terminating GLFW...");
     glfwTerminate();
 }
@@ -14,11 +22,11 @@ bool Window::Init(int width, int height, string title) {
     _width  = width;
     _height = height;
 
-    _log->trace("initializing glfw...");
     if (glfwInit() == GLFW_FALSE) {
         _log->critical("failed to initialize GLFW");
         return false;
     }
+    _log->trace("initialized GLFW");
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -29,19 +37,19 @@ bool Window::Init(int width, int height, string title) {
     _log->info("MacOS is detected. Appropriate changes were made for window");
 #endif
 
-    _log->trace("initializing window...");
     _window = glfwCreateWindow(_width, _height, _title.c_str(), nullptr, nullptr);
     glfwMakeContextCurrent(_window);
     if (_window == nullptr) {
         _log->critical("failed to open window");
         return false;
     }
+    _log->trace("initialized window");
 
-    _log->trace("initializing GLAD...");
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
         _log->critical("failed to initialize GLAD");
         return false;
     }
+    _log->trace("initialized GLAD");
 
     return true;
 }
@@ -51,8 +59,8 @@ void Window::Refresh() {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Window::ChangeBackgroundColor(int r, int g, int b) {
-    glClearColor(r, g, b, 0);
+void Window::ChangeBackgroundColor(GLfloat r, GLfloat g, GLfloat b) {
+    glClearColor(r, g, b, 0.f);
 }
 
 bool Window::IsOpened() {

@@ -15,6 +15,7 @@
 
 int main() {
     auto log = spdlog::stdout_color_mt("stdout");
+    log->set_level(spdlog::level::trace);
 
     Config config(log);
     if (!config.Init("./settings.json")) {
@@ -47,13 +48,11 @@ int main() {
     }
 
     program.Use();
-    vertex_shader.Unload();
-    fragment_shader.Unload();
 
     VAO vao(log);
     vao.Init();
     
-    float vertices[]{-0.5f, -0.5f, 0.5f, -0.5f, 0.f, 0.5f};
+    float vertices[]{-0.9f, -0.5f, 0.5f, -0.5f, 0.f, 0.5f};
 
     VBO vbo(log);
     vbo.Init(vertices, sizeof(vertices));

@@ -17,7 +17,6 @@ public:
     ~Shader();
 
     bool Load(string path, GLenum type);
-    void Unload();
 
     GLuint native_shader();
 };

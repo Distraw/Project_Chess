@@ -16,7 +16,7 @@ public:
 
     bool Init(GLuint vertex_shader, GLuint fragment_shader);
 
-    void Use();
+    void Use(bool state = true);
 
     GLuint native_program();
 };

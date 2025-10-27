@@ -19,6 +19,7 @@ bool Config::Init(string path) {
         _log->critical("failed to open configuration file: {0}", _path);
         return false;
     }
+    _log->trace("opened config file from {0}", _path);
 
     json cfg;
     try {
@@ -36,6 +37,7 @@ bool Config::Init(string path) {
         _log->critical("failed to parse {0}: {1}", _path, e.what());
         return false;
     }
+    _log->trace("parsed config file from JSON");
 
     file.close();
     return true;

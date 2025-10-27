@@ -1,5 +1,3 @@
-#include <memory>
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -23,7 +21,7 @@ public:
     bool Init(int width, int height, string title);
     void Refresh();
 
-    void ChangeBackgroundColor(int r, int g, int b);
+    void ChangeBackgroundColor(GLfloat r, GLfloat g, GLfloat b);
 
     bool IsOpened();
 
